@@ -4,7 +4,7 @@ import requests
 import uuid
 
 app = Flask(__name__)
-app.debug = True
+app.debug = False
 app.secret_key = 'hello'
 
 
@@ -57,11 +57,10 @@ def callback():
         'first_name':'Syed Suhail',
         'last_name':'Ahmed',
         'projects_url':'https://www.github.com/syedsuhail',
-        'code_url':'',
+        'code_url':'https://github.com/syedsuhail/agiliq_api_consumer/blob/master/flask_agiliq.py',
         'resume':open('suhail_resume2.pdf','rb'),}
 
     r = requests.post('http://join.agiliq.com/api/resume/upload/',params=params)
-   # r = Request('POST',url='http://www.hello.com',params=params).prepare()
     if r.ok:
         return "Successfully posted resume"
     else:
