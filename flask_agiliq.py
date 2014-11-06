@@ -5,7 +5,7 @@ import uuid
 from wtforms import Form, StringField, FileField, SubmitField, validators
 
 app = Flask(__name__)
-app.debug = True
+app.debug = False
 app.secret_key = 'hello'
 
 class ResumeForm(Form):
@@ -65,9 +65,6 @@ def callback():
 @app.route('/res_form',methods=['GET','POST'])
 def res_form():
     form = ResumeForm()
-    if request.method == 'POST' and form.validate():
-        
-        return "HEllo"
     return render_template('res_form.html',form=form,access_token=session['access_token'])
     
 
