@@ -1,13 +1,20 @@
-from flask import Flask,redirect,session,request,abort
+from flask import Flask,redirect,session,request,abort,render_template
 from requests import Request
 import requests
 import uuid
+from wtforms import Form, StringField, FileField, SubmitField, validators
 
 app = Flask(__name__)
-app.debug = False
+app.debug = True
 app.secret_key = 'hello'
 
-
+class ResumeForm(Form):
+    first_name = StringField('First Name')
+    last_name = StringField('Last Name')
+    projects_url = StringField('Projects Url')
+    code_url = StringField('Code Url')
+    resume = FileField('Resume')
+    submit = SubmitField()
 
 @app.route('/')
 def index():
@@ -23,7 +30,7 @@ def index():
     r = Request('GET',url=agiliq_auth_url,params=params).prepare()
     return redirect(r.url)
 
-@app.route('/callback')
+@app.route('/callback',methods=['GET','POST'])
 def callback():
     original_state = session.get('agiliq_auth_state')
     if not original_state:
@@ -52,19 +59,17 @@ def callback():
         abort(404) 
     data = r.json()
     access_token = data['access_token']
-    params = {
-        'access_token':access_token,
-        'first_name':'Syed Suhail',
-        'last_name':'Ahmed',
-        'projects_url':'https://www.github.com/syedsuhail',
-        'code_url':'https://github.com/syedsuhail/agiliq_api_consumer/blob/master/flask_agiliq.py',
-        'resume':open('suhail_resume2.pdf','rb'),}
-
-    r = requests.post('http://join.agiliq.com/api/resume/upload/',params=params)
-    if r.ok:
-        return "Successfully posted resume"
-    else:
-        abort(404)
+    session['access_token'] = access_token
+    return redirect('res_form')
+    
+@app.route('/res_form',methods=['GET','POST'])
+def res_form():
+    form = ResumeForm()
+    if request.method == 'POST' and form.validate():
+        
+        return "HEllo"
+    return render_template('res_form.html',form=form,access_token=session['access_token'])
+    
 
 if __name__ == '__main__':
     app.run()

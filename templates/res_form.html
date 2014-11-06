@@ -1,0 +1,16 @@
+<! DOCTYPE = html>
+<html>
+<head>
+</head>
+<body>
+  <p>Hello</p>
+  <form action="http://join.agiliq.com/api/resume/upload/?access_token={{access_token}}" method=post name="res_form" enctype=multipart/form-data>
+    <p>First Name: {{form.first_name}}</p>
+    <p>Last Name: {{form.last_name}}</p>
+    <p>Projects Url: {{form.projects_url}}</p>
+    <p>Code Url: {{form.code_url}}</p>
+    <p>Resume : {{form.resume}}</p>
+    <p>{{form.submit}}</p>
+    <p>{{access_token}}</p>
+   </form>
+</body>
