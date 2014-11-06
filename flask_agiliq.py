@@ -6,7 +6,7 @@ from wtforms import Form, StringField, FileField, SubmitField, validators
 
 app = Flask(__name__)
 app.debug = False
-app.secret_key = 'hello'
+app.secret_key = 'mynameisSuhail'
 
 class ResumeForm(Form):
     first_name = StringField('First Name')
@@ -35,7 +35,7 @@ def callback():
     original_state = session.get('agiliq_auth_state')
     if not original_state:
         abort(404)
-    del(session['agiliq_auth_state'])
+    
 
     state = request.args.get('state')
     code = request.args.get('code')
@@ -59,14 +59,10 @@ def callback():
         abort(404) 
     data = r.json()
     access_token = data['access_token']
-    session['access_token'] = access_token
-    return redirect('res_form')
-    
-@app.route('/res_form',methods=['GET','POST'])
-def res_form():
     form = ResumeForm()
-    return render_template('res_form.html',form=form,access_token=session['access_token'])
+    return render_template('res_form.html',form=form,access_token=access_token)
     
+        
 
 if __name__ == '__main__':
     app.run()
